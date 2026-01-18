@@ -536,13 +536,5 @@ SOFTWARE.
 
 ---
 
-## Related Projects
-
-- [VS Code Extension Manager](https://github.com/example/vscode-ext-manager)
-- [Extension Marketplace CLI](https://github.com/example/marketplace-cli)
-- [VSIX Analyzer](https://github.com/example/vsix-analyzer)
-
----
-
 **Made with ❤️ by Mohammad Faiz**  
 **Version 2.0.0 | January 2026**
