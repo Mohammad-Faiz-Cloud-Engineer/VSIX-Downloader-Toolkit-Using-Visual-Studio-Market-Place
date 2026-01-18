@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Enterprise VSIX Downloader for VS Code Extensions">
+    <meta name="author" content="Mohammad Faiz">
+    <title>VSIX Downloader | Enterprise Extension Manager</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1e40af;
+            --primary-light: #3b82f6;
+            --secondary: #0f172a;
+            --accent: #06b6d4;
+            --success: #10b981;
+            --error: #ef4444;
+            --warning: #f59e0b;
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --bg-tertiary: #f1f5f9;
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --text-tertiary: #64748b;
+            --border: #e2e8f0;
+            --border-light: #f1f5f9;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .card {
+            background: var(--bg-primary);
+            border-radius: 12px;
+            box-shadow: var(--shadow-xl);
+            border: 1px solid var(--border);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            padding: 60px 60px 80px;
+            text-align: center;
+            position: relative;
+        }
+
+        .header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 40px;
+            background: var(--bg-primary);
+            border-radius: 40px 40px 0 0;
+        }
+
+        .logo {
+            width: 64px;
+            height: 64px;
+            margin: 0 auto 24px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .logo svg {
+            width: 36px;
+            height: 36px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 12px;
+            letter-spacing: -0.025em;
+        }
+
+        .subtitle {
+            font-size: 1.125rem;
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 400;
+        }
+
+        .content {
+            padding: 40px 60px 60px;
+        }
+
+        .form-group {
+            margin-bottom: 32px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 14px 16px;
+            background: var(--bg-primary);
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 0.9375rem;
+            font-family: 'JetBrains Mono', monospace;
+            transition: all 0.2s ease;
+            outline: none;
+        }
+
+        input[type="text"]::placeholder {
+            color: var(--text-tertiary);
+            font-family: 'Inter', sans-serif;
+        }
+
+        input[type="text"]:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 14px 28px;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.9375rem;
+            font-weight: 600;
+            font-family: inherit;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+
+        .btn-primary {
+            width: 100%;
+            background: var(--primary);
+            color: white;
+            box-shadow: var(--shadow);
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            box-shadow: var(--shadow-md);
+            transform: translateY(-1px);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+            box-shadow: var(--shadow);
+        }
+
+        .btn-success:hover {
+            background: #059669;
+            box-shadow: var(--shadow-md);
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            background: var(--border);
+            transform: translateY(-1px);
+        }
+
+        .section {
+            margin-top: 40px;
+            padding: 32px;
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            display: none;
+        }
+
+        .section.visible {
+            display: block;
+        }
+
+        .section-header {
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+
+        .section-description {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .instructions {
+            list-style: none;
+            counter-reset: step;
+        }
+
+        .instructions li {
+            counter-increment: step;
+            position: relative;
+            padding: 20px 20px 20px 60px;
+            margin-bottom: 12px;
+            background: var(--bg-primary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 0.9375rem;
+            color: var(--text-secondary);
+        }
+
+        .instructions li::before {
+            content: counter(step);
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--primary);
+            color: white;
+            border-radius: 6px;
+            font-weight: 700;
+            font-size: 0.875rem;
+        }
+
+        .instructions a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .instructions a:hover {
+            text-decoration: underline;
+        }
+
+        .instructions strong {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        .instructions code {
+            padding: 2px 6px;
+            background: var(--bg-tertiary);
+            border-radius: 4px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.875rem;
+            color: var(--primary);
+        }
+
+        .url-display {
+            background: var(--secondary);
+            border-radius: 8px;
+            padding: 24px;
+            margin-top: 24px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8125rem;
+            line-height: 1.8;
+        }
+
+        .url-label {
+            color: var(--accent);
+            font-weight: 600;
+            margin-bottom: 8px;
+            display: block;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-size: 0.75rem;
+        }
+
+        .url-text {
+            color: #94a3b8;
+            word-break: break-all;
+        }
+
+        .button-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-top: 24px;
+        }
+
+        .info-box {
+            margin-top: 24px;
+            padding: 16px 20px;
+            background: rgba(6, 182, 212, 0.05);
+            border-left: 4px solid var(--accent);
+            border-radius: 4px;
+        }
+
+        .info-box-text {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .toast {
+            position: fixed;
+            top: 24px;
+            right: 24px;
+            min-width: 320px;
+            max-width: 420px;
+            padding: 16px 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: var(--shadow-xl);
+            border: 1px solid var(--border);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .toast-icon {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .toast-content {
+            flex: 1;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--text-primary);
+            line-height: 1.4;
+            word-break: break-word;
+        }
+
+        .toast.success .toast-icon {
+            background: var(--success);
+        }
+
+        .toast.error .toast-icon {
+            background: var(--error);
+        }
+
+        .toast.info .toast-icon {
+            background: var(--primary);
+        }
+
+        .toast.success .toast-icon::after {
+            content: '✓';
+            color: white;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+
+        .toast.error .toast-icon::after {
+            content: '✕';
+            color: white;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+
+        .toast.info .toast-icon::after {
+            content: 'i';
+            color: white;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+
+        .footer {
+            margin-top: 40px;
+            padding-top: 32px;
+            border-top: 1px solid var(--border);
+            text-align: center;
+        }
+
+        .footer-text {
+            font-size: 0.875rem;
+            color: var(--text-tertiary);
+        }
+
+        .footer-link {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .footer-link:hover {
+            text-decoration: underline;
+        }
+
+        .divider {
+            margin: 0 8px;
+            color: var(--border);
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                padding: 40px 30px 60px;
+            }
+
+            .content {
+                padding: 30px 30px 40px;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .subtitle {
+                font-size: 1rem;
+            }
+
+            .button-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .section {
+                padding: 24px;
+            }
+
+            .instructions li {
+                padding-left: 55px;
+            }
+
+            .toast {
+                min-width: 280px;
+                max-width: calc(100vw - 48px);
+                right: 24px;
+            }
+        }
+
+        @media (max-width: 640px) {
+            body {
+                padding: 20px 16px;
+            }
+
+            .header {
+                padding: 32px 24px 48px;
+            }
+
+            .content {
+                padding: 24px;
+            }
+
+            .section {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <div class="header">
+                <div class="logo">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M9 3L5 7L9 11" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M15 13L19 17L15 21" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M14 4L10 20" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                </div>
+                <h1>VSIX Downloader</h1>
+                <p class="subtitle">Enterprise Extension Manager for Visual Studio Code</p>
+            </div>
+
+            <div class="content">
+                <div class="form-group">
+                    <label class="form-label" for="extensionUrl">Extension URL</label>
+                    <div class="input-wrapper">
+                        <input 
+                            type="text" 
+                            id="extensionUrl" 
+                            placeholder="https://marketplace.visualstudio.com/items?itemName=..."
+                            autocomplete="off"
+                        >
+                    </div>
+                </div>
+
+                <button class="btn btn-primary" onclick="generateGuide()">
+                    Generate Download Guide
+                </button>
+
+                <div id="result" class="section">
+                    <div class="section-header">
+                        <h2 class="section-title">Download Instructions</h2>
+                        <p class="section-description">Follow these steps to download the extension</p>
+                    </div>
+                    <ol id="instructions" class="instructions"></ol>
+                </div>
+
+                <div id="finalUrlSection" class="section">
+                    <div class="section-header">
+                        <h2 class="section-title">Download Manager</h2>
+                        <p class="section-description">Enter version and generate download links</p>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="versionInput">Version Number</label>
+                        <div class="input-wrapper">
+                            <input 
+                                type="text" 
+                                id="versionInput" 
+                                placeholder="1.2.3"
+                                autocomplete="off"
+                            >
+                        </div>
+                    </div>
+
+                    <button class="btn btn-primary" onclick="generateFinalUrls()">
+                        Generate Download URLs
+                    </button>
+
+                    <div id="finalUrl" class="url-display" style="display: none;"></div>
+
+                    <div class="button-grid" id="downloadButtons" style="display: none;">
+                        <button class="btn btn-success" onclick="downloadExtension('vsix')">
+                            Download VSIX
+                        </button>
+                        <button class="btn btn-success" onclick="downloadExtension('vsixpackage')">
+                            Download Package
+                        </button>
+                        <button class="btn btn-secondary" onclick="copyUrls()">
+                            Copy URLs
+                        </button>
+                    </div>
+
+                    <div class="info-box">
+                        <p class="info-box-text">
+                            <strong>Pro Tip:</strong> Use the bookmarklet version for instant one-click downloads directly from the marketplace.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="footer">
+                    <p class="footer-text">
+                        Created by <a href="#" class="footer-link">Mohammad Faiz</a>
+                        <span class="divider">•</span>
+                        <a href="https://github.com" class="footer-link" target="_blank">GitHub</a>
+                        <span class="divider">•</span>
+                        Version 2.0.0
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        'use strict';
+
+        let urlTemplateVSIX = '';
+        let urlTemplateVSIXPackage = '';
+        let extensionName = '';
+        let finalUrlVSIX = '';
+        let finalUrlVSIXPackage = '';
+
+        const Utils = {
+            showToast(message, type = 'info') {
+                const existingToast = document.querySelector('.toast');
+                if (existingToast) {
+                    existingToast.remove();
+                }
+
+                const toast = document.createElement('div');
+                toast.className = `toast ${type}`;
+                
+                const icon = document.createElement('div');
+                icon.className = 'toast-icon';
+                
+                const content = document.createElement('div');
+                content.className = 'toast-content';
+                content.textContent = message;
+                
+                toast.appendChild(icon);
+                toast.appendChild(content);
+                document.body.appendChild(toast);
+
+                setTimeout(() => {
+                    toast.style.animation = 'slideIn 0.3s ease reverse';
+                    setTimeout(() => toast.remove(), 300);
+                }, 3500);
+            },
+
+            async copyToClipboard(text) {
+                try {
+                    await navigator.clipboard.writeText(text);
+                    this.showToast('URLs copied to clipboard successfully', 'success');
+                    return true;
+                } catch (err) {
+                    this.showToast('Failed to copy URLs to clipboard', 'error');
+                    return false;
+                }
+            },
+
+            validateUrl(url) {
+                try {
+                    const parsed = new URL(url);
+                    return parsed.hostname.includes('marketplace.visualstudio.com');
+                } catch {
+                    return false;
+                }
+            },
+
+            validateVersion(version) {
+                return /^\d+\.\d+\.\d+/.test(version);
+            }
+        };
+
+        function resetProcess() {
+            document.getElementById('result').classList.remove('visible');
+            document.getElementById('finalUrlSection').classList.remove('visible');
+            document.getElementById('instructions').innerHTML = '';
+            document.getElementById('versionInput').value = '';
+            document.getElementById('finalUrl').style.display = 'none';
+            document.getElementById('downloadButtons').style.display = 'none';
+        }
+
+        document.getElementById('extensionUrl').addEventListener('input', resetProcess);
+        document.getElementById('extensionUrl').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') generateGuide();
+        });
+        document.getElementById('versionInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') generateFinalUrls();
+        });
+
+        function generateGuide() {
+            const url = document.getElementById('extensionUrl').value.trim();
+
+            resetProcess();
+
+            if (!url) {
+                Utils.showToast('Please enter a valid extension URL', 'error');
+                return;
+            }
+
+            if (!Utils.validateUrl(url)) {
+                Utils.showToast('Invalid VS Code Marketplace URL format', 'error');
+                return;
+            }
+
+            try {
+                const parsedUrl = new URL(url);
+                const itemName = parsedUrl.searchParams.get('itemName');
+
+                if (!itemName || !itemName.includes('.')) {
+                    throw new Error('Invalid extension URL format');
+                }
+
+                const [publisher, extension] = itemName.split('.');
+                extensionName = itemName;
+
+                urlTemplateVSIX = `https://${publisher}.gallery.vsassets.io/_apis/public/gallery/publisher/${publisher}/extension/${extension}/[VERSION]/assetbyname/Microsoft.VisualStudio.Services.VSIXPackage`;
+                urlTemplateVSIXPackage = `https://marketplace.visualstudio.com/_apis/public/gallery/publishers/${publisher}/vsextensions/${extension}/[VERSION]/vspackage`;
+
+                const instructions = [
+                    `Navigate to the extension page: <a href="${url}" target="_blank" rel="noopener">${url}</a>`,
+                    `Locate the <strong>Version</strong> information in the extension details panel`,
+                    `Copy the version number in the format <code>1.2.3</code> and enter it below`,
+                    `Click <strong>Generate Download URLs</strong> to create the download links`,
+                    `Select your preferred format and initiate the download`
+                ];
+
+                const instructionsElement = document.getElementById('instructions');
+                instructionsElement.innerHTML = '';
+                instructions.forEach(instruction => {
+                    const li = document.createElement('li');
+                    li.innerHTML = instruction;
+                    instructionsElement.appendChild(li);
+                });
+
+                document.getElementById('result').classList.add('visible');
+                document.getElementById('finalUrlSection').classList.add('visible');
+                
+                Utils.showToast('Download guide generated successfully', 'success');
+                setTimeout(() => document.getElementById('versionInput').focus(), 300);
+
+            } catch (error) {
+                Utils.showToast('Error processing extension URL', 'error');
+            }
+        }
+
+        function generateFinalUrls() {
+            const version = document.getElementById('versionInput').value.trim();
+
+            if (!version) {
+                Utils.showToast('Please enter a version number', 'error');
+                return;
+            }
+
+            if (!Utils.validateVersion(version)) {
+                Utils.showToast('Invalid version format. Use format: x.x.x', 'error');
+                return;
+            }
+
+            finalUrlVSIX = urlTemplateVSIX.replace('[VERSION]', version);
+            finalUrlVSIXPackage = urlTemplateVSIXPackage.replace('[VERSION]', version);
+
+            document.getElementById('finalUrl').innerHTML = `
+                <span class="url-label">VSIX Download URL</span>
+                <div class="url-text">${finalUrlVSIX}</div>
+                <span class="url-label" style="margin-top: 20px;">VSIXPackage Download URL</span>
+                <div class="url-text">${finalUrlVSIXPackage}</div>
+            `;
+            
+            document.getElementById('finalUrl').style.display = 'block';
+            document.getElementById('downloadButtons').style.display = 'grid';
+            
+            Utils.showToast('Download URLs generated successfully', 'success');
+        }
+
+        function downloadExtension(type) {
+            const version = document.getElementById('versionInput').value.trim();
+            
+            if (!version) {
+                Utils.showToast('Please generate URLs first', 'error');
+                return;
+            }
+
+            let url, filename;
+            if (type === 'vsix') {
+                url = finalUrlVSIX;
+                filename = `${extensionName}_${version}.vsix`;
+            } else if (type === 'vsixpackage') {
+                url = finalUrlVSIXPackage;
+                filename = `${extensionName}_${version}.vsixpackage`;
+            }
+
+            Utils.showToast(`Initiating download: ${filename}`, 'info');
+
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = filename;
+            link.click();
+
+            setTimeout(() => {
+                Utils.showToast('Download started successfully', 'success');
+            }, 600);
+        }
+
+        function copyUrls() {
+            const text = `VSIX URL:\n${finalUrlVSIX}\n\nVSIXPackage URL:\n${finalUrlVSIXPackage}`;
+            Utils.copyToClipboard(text);
+        }
+
+        window.addEventListener('load', () => {
+            document.getElementById('extensionUrl').focus();
+        });
+    </script>
+</body>
+</html>
