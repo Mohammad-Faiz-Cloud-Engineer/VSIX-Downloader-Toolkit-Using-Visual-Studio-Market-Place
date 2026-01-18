@@ -55,6 +55,13 @@ Or open `index.html` locally in your browser for offline use.
 ## File Structure
 
 ```
+├── browser-extension/                    # Browser extension (Chromium-based browsers only)
+│   ├── manifest.json                     # Extension manifest
+│   ├── background/                       # Service worker
+│   ├── content/                          # Content scripts
+│   ├── popup/                            # Extension popup UI
+│   ├── styles/                           # Injected styles
+│   └── icons/                            # Extension icons
 ├── downloadVSIX-enhanced.js              # Primary script (recommended)
 ├── downloadVSIX-bookmarklet.js           # Bookmarklet version
 ├── downloadVSIX-legacy-with-progress.js  # Legacy with progress tracking
@@ -302,28 +309,45 @@ Both formats are valid and produce installable extension files.
 
 ## Browser Compatibility
 
-### Enhanced & Bookmarklet
-- Chrome 60+ ✅
-- Firefox 55+ ✅
-- Edge 79+ ✅
-- Safari 12+ ✅
-- Opera 47+ ✅
+### Supported Browsers
 
-### Legacy
-- All browsers ✅
-- Internet Explorer 11+ ✅
-- Older browser versions ✅
+All **Chromium-based browsers** are fully supported:
+- ✅ Google Chrome 60+
+- ✅ Microsoft Edge 79+ (Chromium-based)
+- ✅ Brave Browser
+- ✅ Opera 47+
+- ✅ Vivaldi
+- ✅ Arc Browser
+- ✅ Any other Chromium-based browser
 
-### Web Interface
-- Modern browsers ✅
-- Mobile browsers ✅
-- Tablet browsers ✅
+### Not Supported
+- ❌ **Firefox** - Not supported
+- ❌ **DuckDuckGo Browser** - Not supported
+- ❌ Safari - Limited support (Web Interface only)
+
+### Notes
+- **Browser Extension**: Only works on Chromium-based browsers
+- **Web Interface & Bookmarklets**: Work on all Chromium-based browsers
+- **Legacy Script**: Compatible with Chromium-based browsers and older versions
 
 ---
 
 ## Installation Methods
 
-### Method 1: Bookmarklet (Fastest)
+### Method 1: Browser Extension (Recommended for Chromium browsers)
+
+**Supported:** Chrome, Edge, Brave, Opera, Vivaldi, Arc, and all Chromium-based browsers  
+**Not Supported:** Firefox, DuckDuckGo Browser
+
+1. Navigate to the `browser-extension` folder
+2. Open your browser's extensions page (e.g., `chrome://extensions/`)
+3. Enable "Developer mode"
+4. Click "Load unpacked"
+5. Select the `browser-extension` directory
+
+See [browser-extension/README.md](browser-extension/README.md) for detailed instructions.
+
+### Method 2: Bookmarklet (Fastest, works on all Chromium browsers)
 
 ```
 1. Right-click bookmark bar → Add page
@@ -332,13 +356,9 @@ Both formats are valid and produce installable extension files.
 4. Save
 ```
 
-### Method 2: Browser Extension (Future)
+### Method 3: Web Interface (No installation required)
 
-Coming soon: Browser extension for Chrome and Firefox
-
-### Method 3: Command Line (Future)
-
-Coming soon: Node.js CLI tool
+Open `index.html` in any Chromium-based browser or visit the live tool online.
 
 ---
 
@@ -475,7 +495,8 @@ npm test
 
 ## Roadmap
 
-- [ ] Browser extension (Chrome/Firefox)
+- [x] Browser extension (Chromium-based browsers)
+- [ ] Chrome Web Store publication
 - [ ] Command-line interface (Node.js)
 - [ ] Batch download support
 - [ ] Extension dependency resolver
