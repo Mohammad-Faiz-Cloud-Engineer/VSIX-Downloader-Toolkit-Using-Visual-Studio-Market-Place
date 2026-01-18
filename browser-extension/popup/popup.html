@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VSIX Downloader Pro</title>
+    <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="logo">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M9 3L5 7L9 11" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M15 13L19 17L15 21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M14 4L10 20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+            </div>
+            <div class="header-content">
+                <h1>VSIX Downloader Pro</h1>
+                <p class="subtitle">Enterprise Extension Manager</p>
+            </div>
+        </header>
+
+        <div class="status-card" id="statusCard">
+            <div class="status-icon" id="statusIcon">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+                    <path d="M12 6v6l4 2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+            </div>
+            <div class="status-content">
+                <h3 id="statusTitle">Ready</h3>
+                <p id="statusMessage">Navigate to a VS Code extension page</p>
+            </div>
+        </div>
+
+        <div class="extension-info" id="extensionInfo" style="display: none;">
+            <div class="info-row">
+                <span class="info-label">Extension</span>
+                <span class="info-value" id="extensionName">-</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Publisher</span>
+                <span class="info-value" id="extensionPublisher">-</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Version</span>
+                <span class="info-value" id="extensionVersion">-</span>
+            </div>
+        </div>
+
+        <div class="actions" id="actions" style="display: none;">
+            <button class="btn btn-primary" id="downloadVsix">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <span>Download VSIX</span>
+            </button>
+            <button class="btn btn-secondary" id="downloadPackage">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M3.27 6.96L12 12.01l8.73-5.05M12 22.08V12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <span>Download Package</span>
+            </button>
+            <button class="btn btn-tertiary" id="copyUrl">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <span>Copy URL</span>
+            </button>
+        </div>
+
+        <div class="settings-section">
+            <div class="setting-item">
+                <label class="switch">
+                    <input type="checkbox" id="autoInject" checked>
+                    <span class="slider"></span>
+                </label>
+                <div class="setting-label">
+                    <span class="setting-title">Auto-inject buttons</span>
+                    <span class="setting-description">Automatically add download buttons to extension pages</span>
+                </div>
+            </div>
+        </div>
+
+        <footer class="footer">
+            <div class="footer-links">
+                <a href="#" id="openSettings">Settings</a>
+                <span class="divider">•</span>
+                <a href="#" id="openHelp">Help</a>
+                <span class="divider">•</span>
+                <a href="#" id="openAbout">About</a>
+            </div>
+            <div class="footer-version">v2.0.1 by Mohammad Faiz</div>
+        </footer>
+    </div>
+
+    <script src="popup.js"></script>
+</body>
+</html>
