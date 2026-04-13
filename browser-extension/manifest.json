@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "VSIX Downloader Pro",
+  "name": "VSIX Downloader",
   "version": "3.1.0",
   "description": "Browser extension for downloading VS Code extensions as VSIX files.",
   "author": "Mohammad Faiz",
@@ -19,7 +19,7 @@
       "48": "icons/icon-48.png",
       "128": "icons/icon-128.png"
     },
-    "default_title": "VSIX Downloader Pro"
+    "default_title": "VSIX Downloader"
   },
   "background": {
     "service_worker": "background/background.js"
