@@ -756,7 +756,7 @@
 
                 const escapedUrl = Utils.escapeHTML(url);
                 const instructions = [
-                    `Navigate to the extension page: <a href="${escapedUrl}" target="_blank" rel="noopener">${escapedUrl}</a>`,
+                    `Navigate to the extension page: <a href="${url}" target="_blank" rel="noopener">${escapedUrl}</a>`,
                     `Locate the <strong>Version</strong> information in the extension details panel`,
                     `Copy the version number in the format <code>1.2.3</code> and enter it below`,
                     `Click <strong>Generate Download URLs</strong> to create the download links`,
@@ -826,6 +826,14 @@
             } else if (type === 'vsixpackage') {
                 url = finalUrlVSIXPackage;
                 filename = `${extensionName}_${version}.vsixpackage`;
+            } else {
+                Utils.showToast('Invalid download type', 'error');
+                return;
+            }
+
+            if (!url) {
+                Utils.showToast('Please generate URLs first', 'error');
+                return;
             }
 
             Utils.showToast(`Initiating download: ${filename}`, 'info');
