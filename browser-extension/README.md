@@ -1,6 +1,6 @@
 # VSIX Downloader Pro - Browser Extension
 
-Professional browser extension for downloading VS Code extensions as VSIX files. Enterprise-grade tool for offline installations and version control.
+Browser extension for downloading VS Code extensions as VSIX files. Tool for offline installations and version control.
 
 ## ⚠️ Browser Support
 
