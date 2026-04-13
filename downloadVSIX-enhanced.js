@@ -110,7 +110,6 @@
                 this.showNotification('✓ Copied to clipboard!', 'success');
                 return true;
             } catch (err) {
-                console.error('Failed to copy:', err);
                 return false;
             }
         },
@@ -215,7 +214,6 @@
                 return true;
             } catch (error) {
                 Utils.showNotification(`✗ Download failed: ${error.message}`, 'error');
-                console.error('Download error:', error);
                 return false;
             }
         }
@@ -369,7 +367,6 @@
 
 
         } catch (error) {
-            console.error('VSIX Downloader Error:', error);
             Utils.showNotification(`✗ Error: ${error.message}`, 'error');
         }
     }
