@@ -81,7 +81,7 @@ function showWelcomeNotification() {
         message: 'Navigate to any VS Code extension page to start downloading!',
         priority: 1
     }).catch(error => {
-        // Ignored notification silent failure
+        return false; // Notifications gracefully degrade if unsupported
     });
 }
 
@@ -233,7 +233,7 @@ function sanitizeFilename(filename) {
 }
 
 function handleDownloadCreated(downloadItem) {
-    // Download created - tracking only
+    return true; // Tracking hook for future expansion
 }
 
 function handleDownloadChanged(delta) {
@@ -308,7 +308,7 @@ async function showNotification(title, message, type = 'info') {
             priority: type === 'error' ? 2 : 1
         });
     } catch (error) {
-        // Ignore notification silent setup failure
+        return false; // Fallback gracefully if notifications are disabled/unsupported
     }
 }
 
@@ -346,16 +346,4 @@ async function handleSettingsUpdate(request, sendResponse) {
     }
 }
 
-// Keep service worker alive during downloads
-chrome.runtime.onSuspend.addListener(() => {
-    // Service worker suspending - cleanup if needed
-});
-
-// Error boundary
-self.addEventListener('error', (event) => {
-    // Top-level caught execution error
-});
-
-self.addEventListener('unhandledrejection', (event) => {
-    // Caught unhandled promise rejection
-});
+// Service worker lifecycle handled by browser.
