@@ -30,13 +30,13 @@
             const [publisher, extension] = this.identifier.split('.');
             const template = CONFIG.urls[type];
             return template
-                .replace(/\$\{publisher\}/g, publisher)
-                .replace(/\$\{extension\}/g, extension)
-                .replace(/\$\{version\}/g, this.version);
+                .replace(/\$\{publisher\}/g, encodeURIComponent(publisher))
+                .replace(/\$\{extension\}/g, encodeURIComponent(extension))
+                .replace(/\$\{version\}/g, encodeURIComponent(this.version));
         },
 
         getFileName(type = 'vsix') {
-            return `${this.identifier}_${this.version}.${type}`;
+            return `${encodeURIComponent(this.identifier)}_${encodeURIComponent(this.version)}.${type}`;
         },
 
         createDownloadButton() {
@@ -167,8 +167,8 @@
     }
 
     // Validate data
-    if (!extensionData.version || !extensionData.identifier) {
-        console.error('Failed to extract extension metadata');
+    if (!extensionData.version || !extensionData.identifier || !extensionData.identifier.includes('.')) {
+        console.error('Failed to extract extension metadata or invalid identifier format');
         return;
     }
 
@@ -197,8 +197,8 @@
         const URL_PATTERN = 'https://marketplace.visualstudio.com/_apis/public/gallery/publishers/${publisher}/vsextensions/${extension}/${version}/vspackage';
         const itemName = new URL(window.location.href).searchParams.get('itemName');
         
-        if (!itemName) {
-            console.error('Extension itemName not found in URL');
+        if (!itemName || !itemName.includes('.')) {
+            console.error('Extension itemName invalid or not found in URL');
             return;
         }
 
@@ -212,9 +212,9 @@
 
         const version = versionElement.textContent.trim();
         const url = URL_PATTERN
-            .replace('${publisher}', publisher)
-            .replace('${extension}', extension)
-            .replace('${version}', version);
+            .replace('${publisher}', encodeURIComponent(publisher))
+            .replace('${extension}', encodeURIComponent(extension))
+            .replace('${version}', encodeURIComponent(version));
 
         // Open in new tab
         window.open(url, '_blank');
