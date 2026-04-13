@@ -1,6 +1,6 @@
 # VSIX Downloader
 
-Professional toolkit for downloading Visual Studio Code extensions as VSIX files from the marketplace. Designed for enterprise environments, offline installations, and version control.
+Toolkit for downloading Visual Studio Code extensions as VSIX files from the marketplace. Designed for deployment environments, offline installations, and version control.
 
 **Author:** Mohammad Faiz  
 **Version:** 2.0.0  
@@ -16,7 +16,7 @@ This toolkit provides multiple methods to download VS Code extensions as VSIX fi
 
 - Offline installation of extensions
 - Version control and archiving
-- Enterprise deployment scenarios
+- Automated deployment scenarios
 - Air-gapped environment support
 - Extension backup and distribution
 
@@ -165,7 +165,7 @@ Download Complete
 **Type:** Single-page application (no dependencies)
 
 **Features:**
-- Corporate professional UI design
+- Clean step-by-step UI design
 - Step-by-step guided workflow
 - URL validation and error handling
 - Responsive design for all devices
@@ -265,7 +265,7 @@ Both formats are valid and produce installable extension files.
 
 ---
 
-### Example 2: Enterprise Deployment
+### Example 2: Team Deployment
 
 **Scenario:** Deploy specific extension version to 100 machines
 
@@ -431,7 +431,7 @@ done
 ### Automated Deployment
 
 ```powershell
-# PowerShell script for enterprise deployment
+# PowerShell script for automated deployment
 $extensions = @(
     "extension1.vsix",
     "extension2.vsix"
@@ -482,7 +482,7 @@ npm test
 - Implemented toast notifications
 - Added clipboard functionality
 - Multiple selector fallbacks
-- Corporate professional UI
+- Step-by-step UI
 - Improved error handling
 
 ### Version 1.5.0
