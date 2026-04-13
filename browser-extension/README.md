@@ -154,7 +154,13 @@ Mohammad Faiz
 
 ## Version History
 
-### 2.0.1 (Current)
+### 3.1.0 (Current)
+- Unified version across all toolkit components
+- Security hardening: settings whitelist, restricted web_accessible_resources
+- Fixed XSS surfaces and memory leaks
+- Removed debug logging
+
+### 2.0.1
 - Production-ready release
 - Performance optimizations
 - Enhanced error handling
