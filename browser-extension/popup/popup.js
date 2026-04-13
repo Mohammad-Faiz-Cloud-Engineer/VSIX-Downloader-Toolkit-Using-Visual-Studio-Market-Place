@@ -48,7 +48,7 @@ class PopupManager {
                 autoInjectCheckbox.checked = settings.autoInject;
             }
         } catch (error) {
-            // Silently use defaults if settings fail
+            return false; // Silently use defaults if settings fail
         }
     }
 
@@ -389,7 +389,7 @@ class PopupManager {
         try {
             await chrome.storage.sync.set({ [key]: value });
         } catch (error) {
-            // Silently handle if storage failure
+            return false; // Silently handle if storage failure
         }
     }
 
