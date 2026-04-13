@@ -41,8 +41,9 @@
 
         createDownloadButton() {
             const button = document.createElement('a');
-            button.innerHTML = '📦 Download VSIX';
-            button.href = 'javascript:void(0);';
+            button.textContent = 'Download VSIX';
+            button.href = '#';
+            button.setAttribute('role', 'button');
             
             Object.assign(button.style, {
                 fontFamily: 'Segoe UI, system-ui, sans-serif',
@@ -74,13 +75,17 @@
                 button.style.boxShadow = '0 3px 10px rgba(46, 204, 113, 0.3)';
             });
 
-            button.onclick = (event) => {
+            // Store click handler so it can be reassigned after download
+            const originalText = 'Download VSIX';
+            const defaultBg = 'linear-gradient(135deg, #2ecc71, #27ae60)';
+
+            function handleClick(event) {
                 event.preventDefault();
                 const target = event.currentTarget;
-                const originalText = target.innerHTML;
                 
-                target.onclick = null;
-                target.innerHTML = '⏳ Downloading...';
+                // Prevent double-clicks during download
+                target.removeEventListener('click', handleClick);
+                target.textContent = 'Downloading...';
                 target.style.background = '#95a5a6';
 
                 const xhr = new XMLHttpRequest();
@@ -93,7 +98,7 @@
                 xhr.onprogress = (e) => {
                     if (e.lengthComputable) {
                         const progress = Math.round((e.loaded / e.total) * 100);
-                        target.innerHTML = `⏳ Downloading... ${progress}%`;
+                        target.textContent = `Downloading... ${progress}%`;
                     }
                 };
 
@@ -101,46 +106,48 @@
                     if (this.status === 200) {
                         const blob = this.response;
                         const link = document.createElement('a');
-                        link.href = window.URL.createObjectURL(blob);
+                        const objectUrl = window.URL.createObjectURL(blob);
+                        link.href = objectUrl;
                         link.download = filename;
                         link.click();
                         
-                        target.href = link.href;
-                        target.download = link.download;
-                        target.innerHTML = '✓ Download Complete';
-                        target.style.background = 'linear-gradient(135deg, #2ecc71, #27ae60)';
+                        // Revoke blob URL to prevent memory leak
+                        setTimeout(() => window.URL.revokeObjectURL(objectUrl), 1000);
+                        
+                        target.textContent = 'Download Complete';
+                        target.style.background = defaultBg;
                         
                         setTimeout(() => {
-                            target.innerHTML = originalText;
-                            target.onclick = button.onclick;
+                            target.textContent = originalText;
+                            target.addEventListener('click', handleClick);
                         }, 2000);
                     } else {
-                        target.innerHTML = '✗ Error - Retry';
+                        target.textContent = 'Error - Retry';
                         target.style.background = '#e74c3c';
-                        console.error(`Error ${this.status}: Failed to download`);
                         
                         setTimeout(() => {
-                            target.innerHTML = originalText;
-                            target.style.background = 'linear-gradient(135deg, #2ecc71, #27ae60)';
-                            target.onclick = button.onclick;
+                            target.textContent = originalText;
+                            target.style.background = defaultBg;
+                            target.addEventListener('click', handleClick);
                         }, 3000);
                     }
                 };
 
                 xhr.onerror = function() {
-                    target.innerHTML = '✗ Network Error';
+                    target.textContent = 'Network Error';
                     target.style.background = '#e74c3c';
-                    console.error('Network error occurred');
                     
                     setTimeout(() => {
-                        target.innerHTML = originalText;
-                        target.style.background = 'linear-gradient(135deg, #2ecc71, #27ae60)';
-                        target.onclick = button.onclick;
+                        target.textContent = originalText;
+                        target.style.background = defaultBg;
+                        target.addEventListener('click', handleClick);
                     }, 3000);
                 };
 
                 xhr.send();
-            };
+            }
+
+            button.addEventListener('click', handleClick);
 
             return button;
         }
@@ -168,7 +175,6 @@
 
     // Validate data
     if (!extensionData.version || !extensionData.identifier || !extensionData.identifier.includes('.')) {
-        console.error('Failed to extract extension metadata or invalid identifier format');
         return;
     }
 
@@ -182,7 +188,6 @@
         const button = extensionData.createDownloadButton();
         container.parentElement.appendChild(button);
         button.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-        console.log('✓ VSIX Downloader loaded successfully');
     } else {
         console.error('Container element not found');
     }
@@ -198,7 +203,6 @@
         const itemName = new URL(window.location.href).searchParams.get('itemName');
         
         if (!itemName || !itemName.includes('.')) {
-            console.error('Extension itemName invalid or not found in URL');
             return;
         }
 
@@ -206,7 +210,6 @@
         const versionElement = document.querySelector('#versionHistoryTab tbody tr .version-history-container-column');
         
         if (!versionElement) {
-            console.error('Version element not found');
             return;
         }
 
@@ -216,11 +219,9 @@
             .replace('${extension}', encodeURIComponent(extension))
             .replace('${version}', encodeURIComponent(version));
 
-        // Open in new tab
         window.open(url, '_blank');
-        console.log('✓ Opening VSIX package in new tab');
 
     } catch (error) {
-        console.error('Quick download error:', error);
+        // Quick download unavailable
     }
 })();
