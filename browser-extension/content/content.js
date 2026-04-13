@@ -165,7 +165,7 @@ class VSIXDownloader {
                 }, delay);
             }
         } catch (error) {
-            // Error intentionally not logged to console to prevent debug noise in production
+            return false; // Error intentionally handled without console noise in production
         } finally {
             if (this.retryAttempts >= this.maxRetries || this.hasValidData()) {
                 this.isProcessing = false;
@@ -231,7 +231,7 @@ class VSIXDownloader {
                 this.extensionData.name = this.sanitizeText(parts.slice(1).join('.'));
             }
         } catch (error) {
-            // Extraction intentionally returns partial failures cleanly
+            return false; // Extraction intentionally returns partial failures cleanly without crashing
         }
     }
 
@@ -271,7 +271,7 @@ class VSIXDownloader {
                         return true;
                     }
                 } catch (e) {
-                    // Intentionally skipped invalid JSON without throwing
+                    continue; // Intentionally skipped invalid JSON without throwing
                 }
             }
         } catch (error) {
@@ -315,7 +315,7 @@ class VSIXDownloader {
                     }
                 }
             } catch (e) {
-                // Intentionally skipped invalid selectors
+                continue; // Intentionally skipped invalid selectors
             }
         }
         
@@ -383,6 +383,7 @@ class VSIXDownloader {
         } catch (error) {
             // Default to injecting if settings fail
             this.injectDownloadButtons();
+            return false;
         }
     }
 
