@@ -1,5 +1,5 @@
 // Background Service Worker for VSIX Downloader Pro
-// Production-Grade Manifest V3 Implementation
+// Manifest V3 Implementation
 'use strict';
 
 /**
