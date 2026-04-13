@@ -55,8 +55,14 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 .idea/
+.vscode/
 *.suo
 *.iml
 .project
 .classpath
 *.sw?
+
+# DOWNLOADED ARTIFACTS - Prevent committing built/downloaded extension files
+*.vsix
+*.vsixpackage
+*.crx
