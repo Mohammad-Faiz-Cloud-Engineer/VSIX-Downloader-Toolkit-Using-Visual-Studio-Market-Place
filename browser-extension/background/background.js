@@ -332,11 +332,25 @@ async function handleSettingsUpdate(request, sendResponse) {
             return;
         }
         
-        // Update state
-        Object.assign(state.settings, request.settings);
+        // Whitelist allowed setting keys to prevent arbitrary key injection
+        const allowedKeys = ['autoInject', 'showNotifications', 'downloadLocation'];
+        const sanitized = {};
+        for (const key of allowedKeys) {
+            if (key in request.settings) {
+                sanitized[key] = request.settings[key];
+            }
+        }
+        
+        if (Object.keys(sanitized).length === 0) {
+            sendResponse({ success: false, error: 'No valid settings provided' });
+            return;
+        }
+        
+        // Update state with only whitelisted keys
+        Object.assign(state.settings, sanitized);
         
         // Persist to storage
-        await chrome.storage.sync.set(request.settings);
+        await chrome.storage.sync.set(sanitized);
         
         sendResponse({ success: true, settings: state.settings });
         
