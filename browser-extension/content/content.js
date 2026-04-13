@@ -1,4 +1,4 @@
-// Content script for VSIX Downloader Pro - Production Grade
+// Content script for VSIX Downloader Pro
 'use strict';
 
 /**
