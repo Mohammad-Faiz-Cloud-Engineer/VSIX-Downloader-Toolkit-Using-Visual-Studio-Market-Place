@@ -33,6 +33,16 @@ class VSIXDownloader {
         // Debounce timers
         this.debounceTimers = new Map();
         
+        // Constants used for configuration
+        this.timeouts = {
+            domReady: 100,
+            windowLoad: 200,
+            navigation: 500,
+            mutation: 1000,
+            urlCheck: 30000,
+            autoDismiss: 4000
+        };
+        
         this.init();
     }
 
@@ -56,17 +66,17 @@ class VSIXDownloader {
     setupPageLoadHandlers() {
         if (document.readyState === 'loading') {
             document.addEventListener('DOMContentLoaded', () => {
-                this.debounce('domReady', () => this.startProcessing(), 100);
+                this.debounce('domReady', () => this.startProcessing(), this.timeouts.domReady);
             });
         } else {
             // DOM already loaded
-            this.debounce('domReady', () => this.startProcessing(), 100);
+            this.debounce('domReady', () => this.startProcessing(), this.timeouts.domReady);
         }
         
         // Additional safety: wait for window load
         if (document.readyState !== 'complete') {
             window.addEventListener('load', () => {
-                this.debounce('windowLoad', () => this.startProcessing(), 200);
+                this.debounce('windowLoad', () => this.startProcessing(), this.timeouts.windowLoad);
             });
         }
     }
@@ -85,10 +95,10 @@ class VSIXDownloader {
                 lastUrl = currentUrl;
                 this.handleNavigation();
             }
-        }, 500);
+        }, this.timeouts.navigation);
         
-        // Clean up interval after 30 seconds (page should be stable by then)
-        setTimeout(() => clearInterval(urlCheckInterval), 30000);
+        // Clean up interval after max bound (page should be stable by then)
+        setTimeout(() => clearInterval(urlCheckInterval), this.timeouts.urlCheck);
     }
 
     handleNavigation() {
@@ -155,7 +165,7 @@ class VSIXDownloader {
                 }, delay);
             }
         } catch (error) {
-            console.error('[VSIX Downloader] Processing error:', error);
+            // Error intentionally not logged to console to prevent debug noise in production
         } finally {
             if (this.retryAttempts >= this.maxRetries || this.hasValidData()) {
                 this.isProcessing = false;
@@ -200,7 +210,7 @@ class VSIXDownloader {
         
         // Validate extracted data
         if (!this.hasValidData()) {
-            console.warn('[VSIX Downloader] Incomplete metadata:', this.extensionData);
+            // Incomplete metadata, wait for next mutations
         }
     }
 
@@ -221,7 +231,7 @@ class VSIXDownloader {
                 this.extensionData.name = this.sanitizeText(parts.slice(1).join('.'));
             }
         } catch (error) {
-            console.error('[VSIX Downloader] URL extraction error:', error);
+            // Extraction intentionally returns partial failures cleanly
         }
     }
 
@@ -261,11 +271,11 @@ class VSIXDownloader {
                         return true;
                     }
                 } catch (e) {
-                    // Skip invalid JSON
+                    // Intentionally skipped invalid JSON without throwing
                 }
             }
         } catch (error) {
-            console.error('[VSIX Downloader] Structured data extraction error:', error);
+            // Fall through 
         }
         
         return false;
@@ -305,7 +315,7 @@ class VSIXDownloader {
                     }
                 }
             } catch (e) {
-                // Skip invalid selectors
+                // Intentionally skipped invalid selectors
             }
         }
         
@@ -343,7 +353,7 @@ class VSIXDownloader {
                 }
             }
         } catch (error) {
-            console.error('[VSIX Downloader] Page data extraction error:', error);
+            // Fall through to other extraction mechanisms
         }
         
         return false;
@@ -371,7 +381,6 @@ class VSIXDownloader {
                 this.injectDownloadButtons();
             }
         } catch (error) {
-            console.error('[VSIX Downloader] Settings check error:', error);
             // Default to injecting if settings fail
             this.injectDownloadButtons();
         }
@@ -587,7 +596,6 @@ class VSIXDownloader {
             await navigator.clipboard.writeText(text);
             this.showNotification('URLs copied to clipboard', 'success');
         } catch (error) {
-            console.error('[VSIX Downloader] Copy error:', error);
             this.showNotification('Failed to copy URLs', 'error');
         }
     }
@@ -631,7 +639,7 @@ class VSIXDownloader {
                     notification.remove();
                 }
             }, 300);
-        }, 4000);
+        }, this.timeouts.autoDismiss);
     }
 
     setupMessageListener() {
