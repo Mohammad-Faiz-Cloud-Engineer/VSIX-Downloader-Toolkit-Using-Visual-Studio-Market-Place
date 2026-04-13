@@ -32,7 +32,6 @@ class PopupManager {
             await this.checkCurrentTab();
             
         } catch (error) {
-            console.error('[VSIX Downloader Popup] Initialization error:', error);
             this.showStatus('error', 'Initialization Failed', error.message);
         }
     }
@@ -49,7 +48,7 @@ class PopupManager {
                 autoInjectCheckbox.checked = settings.autoInject;
             }
         } catch (error) {
-            console.error('[VSIX Downloader Popup] Failed to load settings:', error);
+            // Silently use defaults if settings fail
         }
     }
 
@@ -98,7 +97,6 @@ class PopupManager {
             await this.fetchExtensionData(tab.id);
             
         } catch (error) {
-            console.error('[VSIX Downloader Popup] Tab check error:', error);
             this.showStatus('error', 'Error', 'Failed to check current tab');
         }
     }
@@ -136,7 +134,6 @@ class PopupManager {
                 );
             }
         } catch (error) {
-            console.error('[VSIX Downloader Popup] Data fetch error:', error);
             this.showStatus(
                 'error',
                 'Content Script Error',
@@ -328,7 +325,6 @@ class PopupManager {
             this.showStatus('success', 'Download Started', `Downloading ${filename}`);
             
         } catch (error) {
-            console.error('[VSIX Downloader Popup] Download error:', error);
             this.showStatus('error', 'Download Failed', error.message);
         } finally {
             // Re-enable button
@@ -379,7 +375,6 @@ class PopupManager {
             }, 2000);
             
         } catch (error) {
-            console.error('[VSIX Downloader Popup] Copy error:', error);
             this.showStatus('error', 'Copy Failed', 'Could not copy to clipboard');
         } finally {
             // Re-enable button
@@ -394,7 +389,7 @@ class PopupManager {
         try {
             await chrome.storage.sync.set({ [key]: value });
         } catch (error) {
-            console.error('[VSIX Downloader Popup] Setting update failed:', error);
+            // Silently handle if storage failure
         }
     }
 
