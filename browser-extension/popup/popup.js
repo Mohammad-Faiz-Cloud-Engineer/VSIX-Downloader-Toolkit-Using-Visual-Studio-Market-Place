@@ -1,4 +1,4 @@
-// Popup script for VSIX Downloader Pro - Production Grade
+// Popup script for VSIX Downloader Pro
 'use strict';
 
 /**
@@ -419,7 +419,7 @@ class PopupManager {
         this.showStatus(
             'info',
             `VSIX Downloader Pro v${manifest.version}`,
-            `Created by ${manifest.author}. Professional extension manager for VS Code.`
+            `Created by ${manifest.author}. Extension manager for VS Code.`
         );
         
         setTimeout(() => {
