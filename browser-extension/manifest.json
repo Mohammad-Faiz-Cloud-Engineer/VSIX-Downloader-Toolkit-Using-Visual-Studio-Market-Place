@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "VSIX Downloader Pro",
   "version": "2.0.1",
-  "description": "Professional extension manager for downloading VS Code extensions as VSIX files. Enterprise-grade tool for offline installations and version control.",
+  "description": "Browser extension for downloading VS Code extensions as VSIX files.",
   "author": "Mohammad Faiz",
   "homepage_url": "https://github.com/mohammadFaiz/vsix-downloader",
   "icons": {
