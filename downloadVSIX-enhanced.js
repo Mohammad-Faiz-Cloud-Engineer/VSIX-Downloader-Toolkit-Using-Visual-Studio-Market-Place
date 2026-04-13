@@ -1,7 +1,7 @@
 /***
 #          Author: Mohammad Faiz
-#          Version: 2.0.0
-#          Last Updated: January 2026
+#          Version: 3.1.0
+#          Last Updated: April 2026
 ***/
 
 (function() {
