@@ -625,6 +625,19 @@
         let finalUrlVSIXPackage = '';
 
         const Utils = {
+            escapeHTML(str) {
+                if (typeof str !== 'string') return '';
+                return str.replace(/[&<>'"]/g, 
+                    tag => ({
+                        '&': '&amp;',
+                        '<': '&lt;',
+                        '>': '&gt;',
+                        "'": '&#39;',
+                        '"': '&quot;'
+                    }[tag] || tag)
+                );
+            },
+            
             showToast(message, type = 'info') {
                 const existingToast = document.querySelector('.toast');
                 if (existingToast) {
@@ -672,7 +685,7 @@
             },
 
             validateVersion(version) {
-                return /^\d+\.\d+\.\d+/.test(version);
+                return /^\d+\.\d+\.\d+(?:[-a-zA-Z0-9.]+)?$/.test(version);
             }
         };
 
@@ -717,13 +730,14 @@
                 }
 
                 const [publisher, extension] = itemName.split('.');
-                extensionName = itemName;
+                extensionName = Utils.escapeHTML(itemName);
 
-                urlTemplateVSIX = `https://${publisher}.gallery.vsassets.io/_apis/public/gallery/publisher/${publisher}/extension/${extension}/[VERSION]/assetbyname/Microsoft.VisualStudio.Services.VSIXPackage`;
-                urlTemplateVSIXPackage = `https://marketplace.visualstudio.com/_apis/public/gallery/publishers/${publisher}/vsextensions/${extension}/[VERSION]/vspackage`;
+                urlTemplateVSIX = `https://${encodeURIComponent(publisher)}.gallery.vsassets.io/_apis/public/gallery/publisher/${encodeURIComponent(publisher)}/extension/${encodeURIComponent(extension)}/[VERSION]/assetbyname/Microsoft.VisualStudio.Services.VSIXPackage`;
+                urlTemplateVSIXPackage = `https://marketplace.visualstudio.com/_apis/public/gallery/publishers/${encodeURIComponent(publisher)}/vsextensions/${encodeURIComponent(extension)}/[VERSION]/vspackage`;
 
+                const escapedUrl = Utils.escapeHTML(url);
                 const instructions = [
-                    `Navigate to the extension page: <a href="${url}" target="_blank" rel="noopener">${url}</a>`,
+                    `Navigate to the extension page: <a href="${escapedUrl}" target="_blank" rel="noopener">${escapedUrl}</a>`,
                     `Locate the <strong>Version</strong> information in the extension details panel`,
                     `Copy the version number in the format <code>1.2.3</code> and enter it below`,
                     `Click <strong>Generate Download URLs</strong> to create the download links`,
@@ -762,14 +776,14 @@
                 return;
             }
 
-            finalUrlVSIX = urlTemplateVSIX.replace('[VERSION]', version);
-            finalUrlVSIXPackage = urlTemplateVSIXPackage.replace('[VERSION]', version);
+            finalUrlVSIX = urlTemplateVSIX.replace('[VERSION]', encodeURIComponent(version));
+            finalUrlVSIXPackage = urlTemplateVSIXPackage.replace('[VERSION]', encodeURIComponent(version));
 
             document.getElementById('finalUrl').innerHTML = `
                 <span class="url-label">VSIX Download URL</span>
-                <div class="url-text">${finalUrlVSIX}</div>
+                <div class="url-text">${Utils.escapeHTML(finalUrlVSIX)}</div>
                 <span class="url-label" style="margin-top: 20px;">VSIXPackage Download URL</span>
-                <div class="url-text">${finalUrlVSIXPackage}</div>
+                <div class="url-text">${Utils.escapeHTML(finalUrlVSIXPackage)}</div>
             `;
             
             document.getElementById('finalUrl').style.display = 'block';
