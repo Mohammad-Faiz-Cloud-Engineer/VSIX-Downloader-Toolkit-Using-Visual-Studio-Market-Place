@@ -220,10 +220,10 @@ function sanitizeFilename(filename) {
     
     // Remove or replace dangerous characters
     let sanitized = filename
-        .replace(/[<>:"|?*]/g, '_')  // Windows forbidden chars
-        .replace(/\.\./g, '_')        // Path traversal
-        .replace(/^\./, '_')          // Hidden files
-        .replace(/\s+/g, '_')         // Spaces
+        .replace(/[<>:"/\\|?*]/g, '_')  // Windows and Unix forbidden chars
+        .replace(/\.\./g, '_')          // Path traversal
+        .replace(/^\./, '_')            // Hidden files
+        .replace(/\s+/g, '_')           // Spaces
         .trim();
     
     // Ensure it has a valid extension
