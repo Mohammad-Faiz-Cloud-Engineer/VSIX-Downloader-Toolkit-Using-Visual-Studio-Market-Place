@@ -189,7 +189,7 @@
         container.parentElement.appendChild(button);
         button.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     } else {
-        console.error('Container element not found');
+        // Container element not found
     }
 
 })();
