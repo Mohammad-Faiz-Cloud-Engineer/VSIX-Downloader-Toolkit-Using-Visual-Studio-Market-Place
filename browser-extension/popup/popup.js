@@ -1,4 +1,4 @@
-// Popup script for VSIX Downloader Pro
+// Popup script for VSIX Downloader
 'use strict';
 
 /**
@@ -32,7 +32,7 @@ class PopupManager {
             await this.checkCurrentTab();
             
         } catch (error) {
-            console.error('[VSIX Downloader Pro Popup] Initialization error:', error);
+            console.error('[VSIX Downloader Popup] Initialization error:', error);
             this.showStatus('error', 'Initialization Failed', error.message);
         }
     }
@@ -49,7 +49,7 @@ class PopupManager {
                 autoInjectCheckbox.checked = settings.autoInject;
             }
         } catch (error) {
-            console.error('[VSIX Downloader Pro Popup] Failed to load settings:', error);
+            console.error('[VSIX Downloader Popup] Failed to load settings:', error);
         }
     }
 
@@ -98,7 +98,7 @@ class PopupManager {
             await this.fetchExtensionData(tab.id);
             
         } catch (error) {
-            console.error('[VSIX Downloader Pro Popup] Tab check error:', error);
+            console.error('[VSIX Downloader Popup] Tab check error:', error);
             this.showStatus('error', 'Error', 'Failed to check current tab');
         }
     }
@@ -136,7 +136,7 @@ class PopupManager {
                 );
             }
         } catch (error) {
-            console.error('[VSIX Downloader Pro Popup] Data fetch error:', error);
+            console.error('[VSIX Downloader Popup] Data fetch error:', error);
             this.showStatus(
                 'error',
                 'Content Script Error',
@@ -328,7 +328,7 @@ class PopupManager {
             this.showStatus('success', 'Download Started', `Downloading ${filename}`);
             
         } catch (error) {
-            console.error('[VSIX Downloader Pro Popup] Download error:', error);
+            console.error('[VSIX Downloader Popup] Download error:', error);
             this.showStatus('error', 'Download Failed', error.message);
         } finally {
             // Re-enable button
@@ -379,7 +379,7 @@ class PopupManager {
             }, 2000);
             
         } catch (error) {
-            console.error('[VSIX Downloader Pro Popup] Copy error:', error);
+            console.error('[VSIX Downloader Popup] Copy error:', error);
             this.showStatus('error', 'Copy Failed', 'Could not copy to clipboard');
         } finally {
             // Re-enable button
@@ -394,7 +394,7 @@ class PopupManager {
         try {
             await chrome.storage.sync.set({ [key]: value });
         } catch (error) {
-            console.error('[VSIX Downloader Pro Popup] Setting update failed:', error);
+            console.error('[VSIX Downloader Popup] Setting update failed:', error);
         }
     }
 
@@ -418,7 +418,7 @@ class PopupManager {
         const manifest = chrome.runtime.getManifest();
         this.showStatus(
             'info',
-            `VSIX Downloader Pro v${manifest.version}`,
+            `VSIX Downloader v${manifest.version}`,
             `Created by ${manifest.author}. Extension manager for VS Code.`
         );
         
