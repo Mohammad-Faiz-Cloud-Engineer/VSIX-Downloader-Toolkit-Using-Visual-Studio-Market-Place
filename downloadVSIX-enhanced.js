@@ -123,6 +123,9 @@
             if (missing.length > 0) {
                 throw new Error(`Missing required fields: ${missing.join(', ')}`);
             }
+            if (!data.identifier.includes('.')) {
+                throw new Error('Invalid extension identifier format');
+            }
             
             return true;
         }
@@ -181,9 +184,9 @@
             const template = CONFIG.urls[type] || CONFIG.urls.vsix;
             
             return template
-                .replace(/\$\{publisher\}/g, publisher)
-                .replace(/\$\{extension\}/g, extension)
-                .replace(/\$\{version\}/g, this.data.version);
+                .replace(/\$\{publisher\}/g, encodeURIComponent(publisher))
+                .replace(/\$\{extension\}/g, encodeURIComponent(extension))
+                .replace(/\$\{version\}/g, encodeURIComponent(this.data.version));
         }
 
         getFileName(type = 'vsix') {
