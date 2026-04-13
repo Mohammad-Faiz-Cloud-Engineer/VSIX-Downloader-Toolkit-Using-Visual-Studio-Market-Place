@@ -1,4 +1,4 @@
-// Content script for VSIX Downloader Pro
+// Content script for VSIX Downloader
 'use strict';
 
 /**
@@ -155,7 +155,7 @@ class VSIXDownloader {
                 }, delay);
             }
         } catch (error) {
-            console.error('[VSIX Downloader Pro] Processing error:', error);
+            console.error('[VSIX Downloader] Processing error:', error);
         } finally {
             if (this.retryAttempts >= this.maxRetries || this.hasValidData()) {
                 this.isProcessing = false;
@@ -200,7 +200,7 @@ class VSIXDownloader {
         
         // Validate extracted data
         if (!this.hasValidData()) {
-            console.warn('[VSIX Downloader Pro] Incomplete metadata:', this.extensionData);
+            console.warn('[VSIX Downloader] Incomplete metadata:', this.extensionData);
         }
     }
 
@@ -221,7 +221,7 @@ class VSIXDownloader {
                 this.extensionData.name = this.sanitizeText(parts.slice(1).join('.'));
             }
         } catch (error) {
-            console.error('[VSIX Downloader Pro] URL extraction error:', error);
+            console.error('[VSIX Downloader] URL extraction error:', error);
         }
     }
 
@@ -265,7 +265,7 @@ class VSIXDownloader {
                 }
             }
         } catch (error) {
-            console.error('[VSIX Downloader Pro] Structured data extraction error:', error);
+            console.error('[VSIX Downloader] Structured data extraction error:', error);
         }
         
         return false;
@@ -343,7 +343,7 @@ class VSIXDownloader {
                 }
             }
         } catch (error) {
-            console.error('[VSIX Downloader Pro] Page data extraction error:', error);
+            console.error('[VSIX Downloader] Page data extraction error:', error);
         }
         
         return false;
@@ -371,7 +371,7 @@ class VSIXDownloader {
                 this.injectDownloadButtons();
             }
         } catch (error) {
-            console.error('[VSIX Downloader Pro] Settings check error:', error);
+            console.error('[VSIX Downloader] Settings check error:', error);
             // Default to injecting if settings fail
             this.injectDownloadButtons();
         }
@@ -587,7 +587,7 @@ class VSIXDownloader {
             await navigator.clipboard.writeText(text);
             this.showNotification('URLs copied to clipboard', 'success');
         } catch (error) {
-            console.error('[VSIX Downloader Pro] Copy error:', error);
+            console.error('[VSIX Downloader] Copy error:', error);
             this.showNotification('Failed to copy URLs', 'error');
         }
     }
