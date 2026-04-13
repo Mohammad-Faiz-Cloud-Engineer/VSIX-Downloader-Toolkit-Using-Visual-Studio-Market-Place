@@ -755,19 +755,42 @@
                 urlTemplateVSIXPackage = `https://marketplace.visualstudio.com/_apis/public/gallery/publishers/${encodeURIComponent(publisher)}/vsextensions/${encodeURIComponent(extension)}/[VERSION]/vspackage`;
 
                 const escapedUrl = Utils.escapeHTML(url);
-                const instructions = [
-                    `Navigate to the extension page: <a href="${url}" target="_blank" rel="noopener">${escapedUrl}</a>`,
-                    `Locate the <strong>Version</strong> information in the extension details panel`,
-                    `Copy the version number in the format <code>1.2.3</code> and enter it below`,
-                    `Click <strong>Generate Download URLs</strong> to create the download links`,
-                    `Select your preferred format and initiate the download`
+                const instructionsElement = document.getElementById('instructions');
+                instructionsElement.textContent = '';
+                
+                const steps = [
+                    (li) => {
+                        li.textContent = 'Navigate to the extension page: ';
+                        const a = document.createElement('a');
+                        a.href = url;
+                        a.target = '_blank';
+                        a.rel = 'noopener';
+                        a.textContent = escapedUrl;
+                        li.appendChild(a);
+                    },
+                    (li) => {
+                        li.textContent = 'Locate the ';
+                        const strong = document.createElement('strong'); strong.textContent = 'Version'; li.appendChild(strong);
+                        li.appendChild(document.createTextNode(' information in the extension details panel'));
+                    },
+                    (li) => {
+                        li.textContent = 'Copy the version number in the format ';
+                        const code = document.createElement('code'); code.textContent = '1.2.3'; li.appendChild(code);
+                        li.appendChild(document.createTextNode(' and enter it below'));
+                    },
+                    (li) => {
+                        li.textContent = 'Click ';
+                        const strong = document.createElement('strong'); strong.textContent = 'Generate Download URLs'; li.appendChild(strong);
+                        li.appendChild(document.createTextNode(' to create the download links'));
+                    },
+                    (li) => {
+                        li.textContent = 'Select your preferred format and initiate the download';
+                    }
                 ];
 
-                const instructionsElement = document.getElementById('instructions');
-                instructionsElement.innerHTML = '';
-                instructions.forEach(instruction => {
+                steps.forEach(stepFn => {
                     const li = document.createElement('li');
-                    li.innerHTML = instruction;
+                    stepFn(li);
                     instructionsElement.appendChild(li);
                 });
 
@@ -798,12 +821,30 @@
             finalUrlVSIX = urlTemplateVSIX.replace('[VERSION]', encodeURIComponent(version));
             finalUrlVSIXPackage = urlTemplateVSIXPackage.replace('[VERSION]', encodeURIComponent(version));
 
-            document.getElementById('finalUrl').innerHTML = `
-                <span class="url-label">VSIX Download URL</span>
-                <div class="url-text">${Utils.escapeHTML(finalUrlVSIX)}</div>
-                <span class="url-label" style="margin-top: 20px;">VSIXPackage Download URL</span>
-                <div class="url-text">${Utils.escapeHTML(finalUrlVSIXPackage)}</div>
-            `;
+            const finalUrlContainer = document.getElementById('finalUrl');
+            finalUrlContainer.textContent = '';
+
+            const label1 = document.createElement('span');
+            label1.className = 'url-label';
+            label1.textContent = 'VSIX Download URL';
+
+            const text1 = document.createElement('div');
+            text1.className = 'url-text';
+            text1.textContent = finalUrlVSIX;
+
+            const label2 = document.createElement('span');
+            label2.className = 'url-label';
+            label2.style.marginTop = '20px';
+            label2.textContent = 'VSIXPackage Download URL';
+
+            const text2 = document.createElement('div');
+            text2.className = 'url-text';
+            text2.textContent = finalUrlVSIXPackage;
+
+            finalUrlContainer.appendChild(label1);
+            finalUrlContainer.appendChild(text1);
+            finalUrlContainer.appendChild(label2);
+            finalUrlContainer.appendChild(text2);
             
             document.getElementById('finalUrl').style.display = 'block';
             document.getElementById('downloadButtons').style.display = 'grid';
