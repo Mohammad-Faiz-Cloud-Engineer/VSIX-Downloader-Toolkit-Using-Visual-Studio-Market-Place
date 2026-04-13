@@ -230,13 +230,25 @@
 
         createButton(text, icon, onClick, variant = 'primary') {
             const button = document.createElement('button');
-            button.innerHTML = `${icon} <span>${text}</span>`;
+            button.type = 'button';
+            // Build button content safely without innerHTML
+            const iconSpan = document.createElement('span');
+            iconSpan.textContent = icon;
+            const textSpan = document.createElement('span');
+            textSpan.textContent = text;
+            button.appendChild(iconSpan);
+            button.appendChild(textSpan);
             
             Object.assign(button.style, CONFIG.styles.button);
-            
-            if (variant === 'secondary') {
+
+            const isSecondary = variant === 'secondary';
+            const defaultBoxShadow = isSecondary
+                ? '0 4px 12px rgba(52, 152, 219, 0.3)'
+                : CONFIG.styles.button.boxShadow;
+
+            if (isSecondary) {
                 button.style.background = 'linear-gradient(135deg, #3498db 0%, #2980b9 100%)';
-                button.style.boxShadow = '0 4px 12px rgba(52, 152, 219, 0.3)';
+                button.style.boxShadow = defaultBoxShadow;
             }
 
             // Hover effects
@@ -246,7 +258,7 @@
 
             button.addEventListener('mouseleave', () => {
                 button.style.transform = 'translateY(0)';
-                button.style.boxShadow = CONFIG.styles.button.boxShadow;
+                button.style.boxShadow = defaultBoxShadow;
             });
 
             button.addEventListener('mousedown', () => {
@@ -283,7 +295,6 @@
         render() {
             // Check if already rendered
             if (document.getElementById('vsix-downloader-container')) {
-                console.log('VSIX Downloader already rendered');
                 return;
             }
 
@@ -355,8 +366,7 @@
             const uiManager = new UIManager(extensionManager);
             uiManager.render();
 
-            console.log('✓ VSIX Downloader Enhanced v2.0.0 initialized');
-            console.log('Extension Data:', extensionManager.data);
+
 
         } catch (error) {
             console.error('VSIX Downloader Error:', error);
