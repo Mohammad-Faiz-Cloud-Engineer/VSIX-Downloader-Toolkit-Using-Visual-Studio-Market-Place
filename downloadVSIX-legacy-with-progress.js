@@ -189,7 +189,7 @@
         container.parentElement.appendChild(button);
         button.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     } else {
-        // Container element not found
+        return false; // Container element not found gracefully aborts
     }
 
 })();
@@ -222,6 +222,6 @@
         window.open(url, '_blank');
 
     } catch (error) {
-        // Quick download unavailable
+        return false; // Quick download unavailable
     }
 })();
