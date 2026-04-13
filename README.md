@@ -3,7 +3,7 @@
 Toolkit for downloading Visual Studio Code extensions as VSIX files from the marketplace. Designed for deployment environments, offline installations, and version control.
 
 **Author:** Mohammad Faiz  
-**Version:** 2.0.0  
+**Version:** 3.1.0  
 **License:** MIT
 
 **Live Tool:** [https://mohammad-faiz-cloud-engineer.github.io/VSIX-Downloader-Toolkit-Using-Visual-Studio-Market-Place/](https://mohammad-faiz-cloud-engineer.github.io/VSIX-Downloader-Toolkit-Using-Visual-Studio-Market-Place/)
@@ -77,7 +77,7 @@ Or open `index.html` locally in your browser for offline use.
 
 **Primary script with modern features**
 
-**Version:** 2.0.0  
+**Version:** 3.1.0  
 **Architecture:** ES6+ Classes (ExtensionManager, UIManager)
 
 **Features:**
@@ -103,7 +103,7 @@ Or open `index.html` locally in your browser for offline use.
 
 **Minified bookmarklet version**
 
-**Version:** 2.0.0  
+**Version:** 3.1.0  
 **Type:** Compressed single-line JavaScript
 
 **Features:**
@@ -129,7 +129,7 @@ Or open `index.html` locally in your browser for offline use.
 
 **Legacy version with download progress tracking**
 
-**Version:** 1.5.0  
+**Version:** 3.1.0  
 **Architecture:** Procedural JavaScript
 
 **Features:**
@@ -476,6 +476,16 @@ npm test
 
 ## Changelog
 
+### Version 3.1.0 (April 2026)
+- Unified version across all components
+- Fixed XSS vulnerability via innerHTML in button creation
+- Fixed broken retry logic in legacy download handler
+- Fixed memory leak from unreleased blob object URLs
+- Fixed broken links from double-escaped URLs in download guide
+- Hardened browser extension security (settings whitelist, restricted web_accessible_resources)
+- Removed all debug console.log statements
+- Updated .gitignore with missing patterns
+
 ### Version 2.0.0 (January 2026)
 - Complete rewrite with ES6+ classes
 - Added three download options
@@ -570,4 +580,4 @@ SOFTWARE.
 ---
 
 **Made with ❤️ by Mohammad Faiz**  
-**Version 2.0.0 | January 2026**
+**Version 3.1.0 | April 2026**
