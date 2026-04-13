@@ -1,4 +1,4 @@
-// Background Service Worker for VSIX Downloader Pro
+// Background Service Worker for VSIX Downloader
 // Manifest V3 Implementation
 'use strict';
 
@@ -51,7 +51,7 @@ async function loadSettings() {
         
         Object.assign(state.settings, settings);
     } catch (error) {
-        console.error('[VSIX Downloader Pro] Failed to load settings:', error);
+        console.error('[VSIX Downloader] Failed to load settings:', error);
     }
 }
 
@@ -63,7 +63,7 @@ function handleInstall(details) {
                 showWelcomeNotification();
             })
             .catch(error => {
-                console.error('[VSIX Downloader Pro] Settings initialization failed:', error);
+                console.error('[VSIX Downloader] Settings initialization failed:', error);
             });
     } else if (details.reason === 'update') {
         const manifest = chrome.runtime.getManifest();
@@ -83,11 +83,11 @@ function showWelcomeNotification() {
     chrome.notifications.create('welcome', {
         type: 'basic',
         iconUrl: 'icons/icon-128.png',
-        title: 'VSIX Downloader Pro Installed',
+        title: 'VSIX Downloader Installed',
         message: 'Navigate to any VS Code extension page to start downloading!',
         priority: 1
     }).catch(error => {
-        console.error('[VSIX Downloader Pro] Welcome notification failed:', error);
+        console.error('[VSIX Downloader] Welcome notification failed:', error);
     });
 }
 
@@ -141,7 +141,7 @@ async function handleDownloadRequest(request, sender, sendResponse) {
         sendResponse({ success: true, downloadId });
         
     } catch (error) {
-        console.error('[VSIX Downloader Pro] Download request failed:', error);
+        console.error('[VSIX Downloader] Download request failed:', error);
         sendResponse({ 
             success: false, 
             error: error.message || 'Download failed'
@@ -208,7 +208,7 @@ async function initiateDownload(url, filename) {
         return downloadId;
         
     } catch (error) {
-        console.error('[VSIX Downloader Pro] Download API error:', error);
+        console.error('[VSIX Downloader] Download API error:', error);
         throw new Error(`Download failed: ${error.message}`);
     }
 }
@@ -284,7 +284,7 @@ function handleDownloadComplete(downloadId, download) {
 }
 
 function handleDownloadInterrupted(downloadId, download, delta) {
-    console.error('[VSIX Downloader Pro] Download interrupted:', {
+    console.error('[VSIX Downloader] Download interrupted:', {
         downloadId,
         error: delta.error?.current
     });
@@ -316,12 +316,12 @@ async function showNotification(title, message, type = 'info') {
         await chrome.notifications.create({
             type: 'basic',
             iconUrl: iconUrl,
-            title: title || 'VSIX Downloader Pro',
+            title: title || 'VSIX Downloader',
             message: message || '',
             priority: type === 'error' ? 2 : 1
         });
     } catch (error) {
-        console.error('[VSIX Downloader Pro] Notification error:', error);
+        console.error('[VSIX Downloader] Notification error:', error);
     }
 }
 
@@ -355,7 +355,7 @@ async function handleSettingsUpdate(request, sendResponse) {
         sendResponse({ success: true, settings: state.settings });
         
     } catch (error) {
-        console.error('[VSIX Downloader Pro] Settings update failed:', error);
+        console.error('[VSIX Downloader] Settings update failed:', error);
         sendResponse({ success: false, error: error.message });
     }
 }
@@ -367,9 +367,9 @@ chrome.runtime.onSuspend.addListener(() => {
 
 // Error boundary
 self.addEventListener('error', (event) => {
-    console.error('[VSIX Downloader Pro] Uncaught error:', event.error);
+    console.error('[VSIX Downloader] Uncaught error:', event.error);
 });
 
 self.addEventListener('unhandledrejection', (event) => {
-    console.error('[VSIX Downloader Pro] Unhandled rejection:', event.reason);
+    console.error('[VSIX Downloader] Unhandled rejection:', event.reason);
 });
