@@ -1,4 +1,4 @@
-# VSIX Downloader Pro - Browser Extension
+# VSIX Downloader - Browser Extension
 
 Browser extension for downloading VS Code extensions as VSIX files. Tool for offline installations and version control.
 
@@ -100,7 +100,7 @@ The extension will now be installed and ready to use!
 2. Test in developer mode
 3. Create ZIP package:
    ```bash
-   zip -r vsix-downloader-pro.zip . -x "*.git*" "manifest-firefox.json"
+   zip -r vsix-downloader.zip . -x "*.git*" "manifest-firefox.json"
    ```
 4. Submit to Chrome Web Store
 
