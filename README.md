@@ -6,7 +6,7 @@ Professional toolkit for downloading Visual Studio Code extensions as VSIX files
 **Version:** 2.0.0  
 **License:** MIT
 
-**🌐 Live Tool:** [https://mohammad-faiz-cloud-engineer.github.io/VSIX-Downloader-Toolkit-Using-Visual-Studio-Market-Place/](https://mohammad-faiz-cloud-engineer.github.io/VSIX-Downloader-Toolkit-Using-Visual-Studio-Market-Place/)
+**Live Tool:** [https://mohammad-faiz-cloud-engineer.github.io/VSIX-Downloader-Toolkit-Using-Visual-Studio-Market-Place/](https://mohammad-faiz-cloud-engineer.github.io/VSIX-Downloader-Toolkit-Using-Visual-Studio-Market-Place/)
 
 ---
 
@@ -24,7 +24,7 @@ This toolkit provides multiple methods to download VS Code extensions as VSIX fi
 
 ## Quick Start
 
-### 🌐 Web Interface (Easiest)
+### Web Interface (Easiest)
 
 **Access the live tool:** [https://mohammad-faiz-cloud-engineer.github.io/VSIX-Downloader-Toolkit-Using-Visual-Studio-Market-Place/](https://mohammad-faiz-cloud-engineer.github.io/VSIX-Downloader-Toolkit-Using-Visual-Studio-Market-Place/)
 
@@ -149,11 +149,11 @@ Or open `index.html` locally in your browser for offline use.
 
 **Progress Display:**
 ```
-⏳ Downloading... 0%
-⏳ Downloading... 34%
-⏳ Downloading... 67%
-⏳ Downloading... 100%
-✓ Download Complete
+Downloading... 0%
+Downloading... 34%
+Downloading... 67%
+Downloading... 100%
+Download Complete
 ```
 
 ---
@@ -295,15 +295,15 @@ Both formats are valid and produce installable extension files.
 
 | Feature | Enhanced | Bookmarklet | Legacy | Web Interface |
 |---------|----------|-------------|--------|---------------|
-| Download VSIX | ✅ | ✅ | ✅ | ✅ |
-| Download Package | ✅ | ✅ | ❌ | ✅ |
-| Copy URL | ✅ | ✅ | ❌ | ✅ |
-| Progress Tracking | ❌ | ❌ | ✅ | ❌ |
-| Toast Notifications | ✅ | ✅ | ❌ | ✅ |
-| Multiple Selectors | ✅ | ✅ | ❌ | N/A |
-| One-Click Use | ❌ | ✅ | ❌ | ❌ |
-| Guided Workflow | ❌ | ❌ | ❌ | ✅ |
-| ES6+ Required | ✅ | ✅ | ❌ | ✅ |
+| Download VSIX | | | | |
+| Download Package | | | | |
+| Copy URL | | | | |
+| Progress Tracking | | | | |
+| Toast Notifications | | | | |
+| Multiple Selectors | | | | N/A |
+| One-Click Use | | | | |
+| Guided Workflow | | | | |
+| ES6+ Required | | | | |
 
 ---
 
@@ -312,18 +312,22 @@ Both formats are valid and produce installable extension files.
 ### Supported Browsers
 
 All **Chromium-based browsers** are fully supported:
-- ✅ Google Chrome 60+
-- ✅ Microsoft Edge 79+ (Chromium-based)
-- ✅ Brave Browser
-- ✅ Opera 47+
-- ✅ Vivaldi
-- ✅ Arc Browser
-- ✅ Any other Chromium-based browser
+- Google Chrome 60+
+- Microsoft Edge 79+ (Chromium-based)
+- Brave Browser
+- Opera 47+
+- Vivaldi
+- Arc Browser
+- Any other Chromium-based browser
 
 ### Not Supported
-- ❌ **Firefox** - Not supported
-- ❌ **DuckDuckGo Browser** - Not supported
-- ❌ Safari - Limited support (Web Interface only)
+- **Firefox** - Not supported
+- **DuckDuckGo Browser** - Not supported
+- Safari - Limited support (Web Interface only)
+
+### Microsoft Edge Browser Extension
+You can download the Edge extension from the Microsoft Edge Add-ons store:
+[Download for Edge](https://microsoftedge.microsoft.com/addons/detail/vsix-downloader-pro/hjonphoepkehlgmmdekbmmeedjdicgfk)
 
 ### Notes
 - **Browser Extension**: Only works on Chromium-based browsers
