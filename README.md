@@ -327,7 +327,7 @@ All **Chromium-based browsers** are fully supported:
 
 ### Microsoft Edge Browser Extension
 You can download the Edge extension from the Microsoft Edge Add-ons store:
-[Download for Edge](https://microsoftedge.microsoft.com/addons/detail/vsix-downloader-pro/hjonphoepkehlgmmdekbmmeedjdicgfk)
+[Download for Edge](https://microsoftedge.microsoft.com/addons/detail/vsix-downloader/hjonphoepkehlgmmdekbmmeedjdicgfk)
 
 ### Notes
 - **Browser Extension**: Only works on Chromium-based browsers
